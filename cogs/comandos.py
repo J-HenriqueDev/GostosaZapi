@@ -1,4 +1,5 @@
 ﻿import discord
+import asyncio
 import requests
 import time
 import datetime
@@ -145,7 +146,7 @@ class comandos(commands.Cog):
             Hugh = choice(hug_img)
             embed = self.bot.embed(ctx)
             embed.title = "Abraço"
-            embed.description = f"**{ctx.author.name}** Ele(a) recebeu um abraço de **{ctx.author.name}**! Que fofos!"
+            embed.description = f"**{ctx.author.name}** Ele(a) recebeu um abraço de **{member.name}**! Que fofos!"
             embed.set_image(url=Hugh)
             ret = await ctx.send(embed=embed)
 
@@ -158,6 +159,42 @@ class comandos(commands.Cog):
 
         if reaction.emoji == '🔁':
             await ctx.send(f"poha {ctx.author.mention} já vai abraçar {member.mention} dnv? parte logo pro beijo karai")
+
+
+
+
+
+
+    @commands.cooldown(1,10,commands.BucketType.user)
+    @commands.guild_only()
+    @commands.command()
+    async def clear(self,ctx,* ,num=None):
+        correto = self.bot._emojis['correto']
+        incorreto = self.bot._emojis['incorreto']
+        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+            await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
+            return
+
+        numero = int(num)
+        if numero>100:
+            numb = 100
+            await ctx.channel.purge(limit=numb)
+            embed=discord.Embed(description=f"{correto} **|** Foram apagadas **{numb}** mensagens.", color=0x7BCDE8)
+            msg = await ctx.send(embed=embed)
+            await asyncio.sleep(10)
+            await msg.delete()
+        elif numero>0:
+            await ctx.channel.purge(limit=numero)
+            embed=discord.Embed(description=f"{correto} **|** Foram apagadas **{numero}** mensagens.", color=0x7BCDE8)
+            msg = await ctx.send(embed=embed)
+            await asyncio.sleep(10)
+            await msg.delete()
+        else:
+            embed=discord.Embed(description=f"{incorreto} **|** Insirá um valor válido entre (1 a 100).", color=0x7BCDE8)
+            msg = await ctx.send(embed=embed)
+            await asyncio.sleep(10)
+            await msg.delete()
+        
         
 
 
