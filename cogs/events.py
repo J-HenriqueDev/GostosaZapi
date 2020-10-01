@@ -127,6 +127,7 @@ class events(commands.Cog):
       if re.search(r'discord(?:app\\?[\s\S]com\\?\/invite|\\?[\s\S]gg|\\?[\s\S]me)\/', message.content) or re.search(r'invite\\?[\s\S]gg\\?\/[\s\S]', message.content) or "privatepage" in message.content.lower() or "naked" in message.content.lower():
         if str("</Link>") in [r.name for r in message.author.roles if r.name != "@everyone"]:
             print("OK")
+            
         else:
           if not message.author.id in aviso1:
             aviso1.append(message.author.id)
