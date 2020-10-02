@@ -77,7 +77,7 @@ class main(discord.ext.commands.Bot):
         embed = discord.Embed(color=self.cor,description=texto)
         embed.set_author(name="BOT ONLINE",icon_url="https://media.discordapp.net/attachments/610244217763004430/760176340594065408/106913079_300540654602631_1385874962180230666_n.jpg")
         #await log_ready.send(embed=embed)
-        #await log_ready.send(f"<a:sabre:761230638044676106> **{self.user.name}** online | `{self.carregados}` Modulos Funcionando corretamente e `{self.falhas}` falhas detectadas.")
+       
         
         
 bot = main()
