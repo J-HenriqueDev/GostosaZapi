@@ -24,6 +24,10 @@ class bemvindo(commands.Cog):
         texto = "<a:emoji:760195465727180852> | **Membros** : "+str(membros).replace("0", "0⃣").replace("1", "1⃣").replace("2", "2⃣").replace("3", "3⃣").replace("4", "4⃣").replace("5", "5⃣").replace("6", "6⃣").replace("7", "7⃣").replace("8", "8⃣").replace("9", "9⃣")
         txt = f"{member} entrou no servidor."
         await canal.edit(topic=texto, reason=txt)
+        dev = member.guild.get_role(759814435031875586)
+        await member.add_roles(dev)
+        #########################################
+
 
 
 
