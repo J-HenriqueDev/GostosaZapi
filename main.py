@@ -21,7 +21,7 @@ class main(discord.ext.commands.Bot):
         self.correto = "<:correto:761205727670829058>"
         self.canais = ["759814502798721024","759814507336826880"]
         self.logs = 759814509287440427
-        self.bans = 759814508818202634
+        self.bans = 759814509287440427
         self.guild = 758823253825028167
         self.token = 'blz,talvez outro dia.'
         self.cor = 0xf10cdb
@@ -72,11 +72,11 @@ class main(discord.ext.commands.Bot):
         print(f'Guilds: {len(self.guilds)}')
         print('---------------------------------')
 
-        log_ready = self.get_channel(759814499661774869)
+        log_ready = self.get_channel(679729322298441765)
         texto = f"<a:sabre:761230638044676106> **{self.user.name}** online | `{self.carregados}` Modulos Funcionando corretamente e `{self.falhas}` falhas detectadas."
         embed = discord.Embed(color=self.cor,description=texto)
         embed.set_author(name="BOT ONLINE",icon_url="https://media.discordapp.net/attachments/610244217763004430/760176340594065408/106913079_300540654602631_1385874962180230666_n.jpg")
-        #await log_ready.send(embed=embed)
+        await log_ready.send(embed=embed)
        
         
         
