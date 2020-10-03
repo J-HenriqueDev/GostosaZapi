@@ -213,6 +213,18 @@ class Owner(commands.Cog):
         embed.title = f'{member} foi desbanido!'
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def check(self, ctx):
+        cargo = ctx.guild.get_role(759814435031875586)
+        try:
+            for member in ctx.guild.members:
+                await self.bot.loop.create_task(member.add_roles(cargo))
+                #await member.add_roles(759814435031875586)
+
+        except:
+            pass
+  
+
 
 def setup(bot):
     bot.add_cog(Owner(bot))
