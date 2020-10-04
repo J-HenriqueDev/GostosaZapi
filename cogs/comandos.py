@@ -23,7 +23,7 @@ class comandos(commands.Cog):
         await ctx.send(embed=embed, delete_after=90)
 
 
-
+    """
     @commands.command()
     async def spotify(self, ctx, member: discord.Member = None):
         if member is None:
@@ -71,7 +71,7 @@ class comandos(commands.Cog):
 
             print('enviando')
             await ctx.send(file=discord.File('./files/imagem1.png'))
-            
+            """
     
     @commands.command(name='hug', aliases=['abraço'])
     async def hug(self, ctx, member : discord.Member, membro = None):
