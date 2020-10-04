@@ -18,9 +18,9 @@ class bemvindo(commands.Cog):
 
     @commands.Cog.listener()  
     async def on_member_join(self, member):
-       if member.guild.id == 758823253825028167 and not member.bot:
-        canal = discord.utils.get(member.guild.channels, id=759814499661774869)
-        membros = member.guild.member_count
+       if member.guild.id == 758823253825028167:
+        canal = member.guild.get_channel(759814499661774869)
+        membros = len(member.guild.members)
         texto = "<a:emoji:760195465727180852> | **Membros** : "+str(membros).replace("0", "0⃣").replace("1", "1⃣").replace("2", "2⃣").replace("3", "3⃣").replace("4", "4⃣").replace("5", "5⃣").replace("6", "6⃣").replace("7", "7⃣").replace("8", "8⃣").replace("9", "9⃣")
         txt = f"{member} entrou no servidor."
         await canal.edit(topic=texto, reason=txt)
@@ -67,7 +67,7 @@ class bemvindo(commands.Cog):
 
         fundo.paste(saida, (43, 91), saida)
         fundo.save("cogs/img/welcome.png")   
-        canal = discord.utils.get(member.guild.channels, id=759814493911121930)
+        canal = self.bot.get_channel(759814493911121930)
         await canal.send(f"Olá {member.mention}, seja bem vindo ao servidor da **GostosaZapi**, leia as <#759814492888236043> para ficar por dentro do servidor.", file=discord.File('cogs/img/welcome.png'))
  
 
@@ -75,8 +75,8 @@ class bemvindo(commands.Cog):
     @commands.Cog.listener()  
     async def on_member_remove(self, member):
        if member.guild.id == 758823253825028167:
-        canal = discord.utils.get(member.guild.channels, id=759814499661774869)
-        membros = member.guild.member_count
+        canal = member.guild.get_channel(759814499661774869)
+        membros = len(member.guild.members)
         texto = "<a:emoji:760195465727180852> | **Membros** : "+str(membros).replace("0", "0⃣").replace("1", "1⃣").replace("2", "2⃣").replace("3", "3⃣").replace("4", "4⃣").replace("5", "5⃣").replace("6", "6⃣").replace("7", "7⃣").replace("8", "8⃣").replace("9", "9⃣")
         txt = f"{member} saiu do servidor."
         await canal.edit(topic=texto, reason=txt)
