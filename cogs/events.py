@@ -211,6 +211,12 @@ class events(commands.Cog):
                     return
                 await canal.send(embed=embed)
 
+    @commands.Cog.listener()  
+    async def on_member_join(self, member):
+       if member.guild.id == 758823253825028167:
+        dev = member.guild.get_role(759814435031875586)
+        await member.add_roles(dev)
+
 
 def setup(bot):
     bot.add_cog(events(bot))
