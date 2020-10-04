@@ -32,7 +32,14 @@ class Owner(commands.Cog):
         args = args.strip('` ')
         python = '```py\n{}\n```'
         result = None
-        env = {'bot': self.bot, 'ctx': ctx}
+        env = {
+            'bot': self.bot,
+            'ctx': ctx,
+            'channel': ctx.channel,
+            'author': ctx.author,
+            'guild': ctx.guild,
+            'msg': ctx.message,
+        }
         env.update(globals())
         try:
             result = eval(args, env)
@@ -174,8 +181,7 @@ class Owner(commands.Cog):
         else:
             value = stdout.getvalue()
             try:
-                emoji = await self.bot.get_emoji(571375157763899412)
-                await ctx.message.add_reaction(emoji)
+                await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
             except:
                 pass
 

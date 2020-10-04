@@ -117,6 +117,9 @@ class informacao(commands.Cog):
     @commands.guild_only()
     @commands.command(description='Mostra as informações de um usuário.',usage='c.userinfo @TOBIAS',aliases=['uinfo', 'usuario'])
     async def userinfo(self, ctx, *, user: discord.Member = None):
+      if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+        await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
+        return
       if user is None:
         usuario = ctx.author
         titulo = "Olá {}, esse é o seu perfil e aqui estão suas informações.".format(ctx.author.name)
