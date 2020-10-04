@@ -213,9 +213,11 @@ class events(commands.Cog):
 
     @commands.Cog.listener()  
     async def on_member_join(self, member):
-       if member.guild.id == 758823253825028167:
+      try:
         dev = member.guild.get_role(759814435031875586)
         await member.add_roles(dev)
+      except:
+        pass
 
 
 def setup(bot):
