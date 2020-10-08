@@ -8,6 +8,7 @@ from utils.role import emojis
 
 
 
+
 class main(discord.ext.commands.Bot):
     def __init__(self):
         super().__init__(command_prefix=commands.when_mentioned_or(secrets.PREFIXO),

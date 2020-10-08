@@ -77,13 +77,13 @@ class Owner(commands.Cog):
         try:
             self.bot.reload_extension(f"cogs.{cog}")
             embed = discord.Embed(
-                colour=0x7289DA,
+                colour=self.bot.cor,
                 description=(f"**[Sucesso] O Modulo `{cog}` foi recarregado corretamente!**"))
 
             await ctx.send(embed=embed, delete_after=20)
         except Exception as e:
             embed = discord.Embed(
-                colour=0x7289DA,
+                colour=self.bot.cor,
                 description=(f"**[ERRO] O Modulo `{cog}` não foi recarregado corretamente**\n\n``{e}``"))
 
             await ctx.send(embed=embed, delete_after=20)
@@ -99,7 +99,7 @@ class Owner(commands.Cog):
         import os
         import sys
         await ctx.message.delete()
-        embed = discord.Embed(description=f"<:like:760197986609004584> O **{ctx.me.name}** está sendo reiniciado!", color=0x7289DA)
+        embed = discord.Embed(description=f"<:like:760197986609004584> O **{ctx.me.name}** está sendo reiniciado!", color=self.bot.cor)
         await ctx.send(embed=embed)
         print(f"REINICIAR USADO POR : {ctx.author}")
         def reiniciar_code():
@@ -192,33 +192,24 @@ class Owner(commands.Cog):
                 await ctx.send(f'```py\n{value}{ret}\n```')
 
 
-    @commands.command(usage='Sigiloso.', description='Sigiloso.')
-    async def botban(self, ctx, *, user: discord.Member = None,reason):
-        print(user.id)      
-        with open("cogs/utils/users_banned.json") as f:
-            jsn = json.load(f)
-        jsn[user] = reason
-        with open("cogs/utils/users_banned.json", "w") as f:
-            f.write(json.dumps("cu", indent=4))
-        embed = self.bot.embed(ctx, invisible=True)
-        embed.title = f'{user} foi banido!'
-        await ctx.send(embed=embed)
+    @commands.command()
+    async def arromba(self, ctx, rola = None):
 
-    @commands.command(usage='Sigiloso.', description='Sigiloso.')
-    async def botunban(self, ctx, member):
-        if not ctx.author.id in self.bot.dono:
-            return await ctx.send(
-                f"<:unlike:760197986592096256> {ctx.author.mention} você não é um desenvolvedor para utilizar esse comando.",
-                delete_after=15)
-        with open("cogs/utils/users_banned.json") as f:
-            jsn = json.load(f)
-        del(jsn[member])
-        with open("cogs/utils/users_banned.json", "w") as f:
-            f.write(json.dumps(jsn, indent=4))
-        embed = self.bot.embed(ctx, invisible=True)
-        embed.title = f'{member} foi desbanido!'
-        await ctx.send(embed=embed)
-
+        if rola is None:
+            return await ctx.send("espeficique o cargo")
+        else:
+            cargo = ctx.guild.get_role(rola)
+            await ctx.send(f"cargo {rola.name} encontrado")
+            await ctx.send("iniciado")
+            try:
+                for member in ctx.guild.members:
+                    await self.bot.loop.create_task(member.add_roles(cargo))
+                    await ctx.channel.send(f"{member.name} recebeu o cargo {cargo.name}.")
+            
+                await ctx.send("processo terminado")
+            except Exception as e:
+                print(e)
+    
     @commands.command()
     async def check(self, ctx):
         cargo = ctx.guild.get_role(759814435031875586)
@@ -227,8 +218,9 @@ class Owner(commands.Cog):
                 await self.bot.loop.create_task(member.add_roles(cargo))
                 #await member.add_roles(759814435031875586)
 
-        except:
-            pass
+        except Exception as e:
+            print(e)
+            
   
 
 

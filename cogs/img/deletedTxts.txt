@@ -1,0 +1,15 @@
+.langset pt-BR
+
+.antiraid 5 30 mute
+
+.antispam 5 mute
+.antispam 5 mute
+.antiraid 5 30 mute
+
+.langli
+
+.languageset
+.langset pt-BR
+
+.languageslist
+

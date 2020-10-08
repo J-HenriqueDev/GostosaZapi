@@ -177,9 +177,9 @@ class informacao(commands.Cog):
     @commands.bot_has_permissions(embed_links=True)
     @commands.command(description='Mostra as informações de um canal.',usage='c.channelinfo #canal',aliases=['canalinfo', 'cinfo'])
     async def channelinfo(self, ctx, *, num=None):
-        if not str(ctx.channel.id) in self.bot.canais and not str(ctx.message.author.id) in self.bot.staff:
-            await ctx.message.add_reaction(":incorreto:594222819064283161")
-            return
+        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+          await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
+          return
         if num is None:
           num = ctx.channel.id
         if str(num).isdigit() == True:
@@ -245,9 +245,9 @@ class informacao(commands.Cog):
     @commands.guild_only()
     @commands.command(description='Mostra as informações de um cargo',usage='c.roleinfo dj',aliases=['rinfo'])
     async def roleinfo(self, ctx, *, role: discord.Role = None):
-        if not str(ctx.channel.id) in self.bot.canais and not str(ctx.message.author.id) in self.bot.staff:
-            await ctx.message.add_reaction(":incorreto:594222819064283161")
-            return
+        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+          await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
+          return
         if role is None:
             return await ctx.send(f'**{ctx.author.name}** você não mencionou um cargo.')
         criado_em = str(role.created_at.strftime("%H:%M:%S - %d/%m/20%y"))
@@ -269,14 +269,14 @@ class informacao(commands.Cog):
         embed.set_footer(text=self.bot.user.name+" © 2020", icon_url=self.bot.user.avatar_url_as())
         await ctx.send(embed=embed)
 
-
+"""
 
     @commands.guild_only()
     @commands.command(aliases=["einfo", "infoemoji", "emoji", "emojinfo"])
     async def emojiinfo(self, ctx, *, emoji: discord.Emoji):
-        if not str(ctx.channel.id) in self.bot.canais and not str(ctx.message.author.id) in self.bot.staff:
-            await ctx.message.add_reaction(":incorreto:594222819064283161")
-            return
+        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+          await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
+          return
         embed = discord.Embed(color=self.bot.cor, timestamp=datetime.datetime.utcnow())
         embed.set_author(name=f"Informações do emoji:", icon_url=emoji.url)
         embed.add_field(name=" Nome:", value=f"``{emoji.name}``",inline=False)
@@ -295,7 +295,7 @@ class informacao(commands.Cog):
         embed.set_footer(text=f'{self.bot.user.name}© 2020', icon_url="https://i.imgur.com/Me7NqbZ.jpg") 
         await ctx.send(embed=embed)
 
-    
+    """
 
 def setup(bot):
     bot.add_cog(informacao(bot))

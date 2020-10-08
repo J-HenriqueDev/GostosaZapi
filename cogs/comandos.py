@@ -195,6 +195,19 @@ class comandos(commands.Cog):
             await asyncio.sleep(10)
             await msg.delete()
         
+    @commands.command()
+    async def clean(self,ctx, amount: int): 
+        if not str(ctx.channel.id) in self.bot.canais and not str(ctx.message.author.id) in self.bot.staff:
+            await ctx.message.add_reaction(":incorreto:594222819064283161")
+            return
+        await ctx.channel.purge(limit=amount)
+        f = open('cogs/img/deletedTxts.txt', 'a')
+        async for message in ctx.channel.history(limit=amount):
+            f.write(message.content)
+            f.write('\n')
+        f.close()
+        await ctx.channel.purge(limit=amount)
+        await ctx.send('Done!', delete_after=5)
         
 
 
