@@ -216,8 +216,6 @@ class Owner(commands.Cog):
         try:
             for member in ctx.guild.members:
                 await self.bot.loop.create_task(member.add_roles(cargo))
-                #await member.add_roles(759814435031875586)
-
         except Exception as e:
             print(e)
             
