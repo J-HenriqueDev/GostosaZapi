@@ -193,7 +193,7 @@ class Owner(commands.Cog):
 
 
     @commands.command()
-    async def arromba(self, ctx, rola = None):
+    async def arromba(self, ctx, rola : discord.Role = None):
 
         if rola is None:
             return await ctx.send("espeficique o cargo")
