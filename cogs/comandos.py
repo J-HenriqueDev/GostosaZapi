@@ -179,18 +179,18 @@ class comandos(commands.Cog):
         if numero>100:
             numb = 100
             await ctx.channel.purge(limit=numb)
-            embed=discord.Embed(description=f"{correto} **|** Foram apagadas **{numb}** mensagens.", color=0x7BCDE8)
+            embed=discord.Embed(description=f"{correto} **|** Foram apagadas **{numb}** mensagens.", color=self.bot.cor)
             msg = await ctx.send(embed=embed)
             await asyncio.sleep(10)
             await msg.delete()
         elif numero>0:
             await ctx.channel.purge(limit=numero)
-            embed=discord.Embed(description=f"{correto} **|** Foram apagadas **{numero}** mensagens.", color=0x7BCDE8)
+            embed=discord.Embed(description=f"{correto} **|** Foram apagadas **{numero}** mensagens.", color=self.bot.cor)
             msg = await ctx.send(embed=embed)
             await asyncio.sleep(10)
             await msg.delete()
         else:
-            embed=discord.Embed(description=f"{incorreto} **|** Insirá um valor válido entre (1 a 100).", color=0x7BCDE8)
+            embed=discord.Embed(description=f"{incorreto} **|** Insirá um valor válido entre (1 a 100).", color=self.bot.cor)
             msg = await ctx.send(embed=embed)
             await asyncio.sleep(10)
             await msg.delete()
