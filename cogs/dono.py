@@ -193,20 +193,31 @@ class Owner(commands.Cog):
 
 
     @commands.command()
-    async def arromba(self, ctx,*, rola = None):
-        print(rola)
+    async def arromba(self, ctx,*, rola :discord.Role =  None):      
+        membros_total = 1 
         if rola is None:
             return await ctx.send("espeficique o cargo")
         else:
             cargo = ctx.guild.get_role(rola)
-            await ctx.send(f"cargo {rola.name} encontrado")
-            await ctx.send("iniciado")
+            await ctx.send("<a:run_child:763119754881794068> Procurando na lista de cargos...",delete_after=5)
+            await asyncio.sleep(5)
+            await ctx.send(f"<a:Checkmark:763111771611201546> o cargo **{rola.name}** foi encontrado.",delete_after=5)
+            await asyncio.sleep(5)
+            await ctx.send("<a:WideTrump:763119810279374898> Iniciando o processo de adição em massa de cargos.",delete_after=15)
             try:
                 for member in ctx.guild.members:
-                    await self.bot.loop.create_task(member.add_roles(cargo))
-                    await ctx.channel.send(f"{member.name} recebeu o cargo {cargo.name}.")
-            
-                await ctx.send("processo terminado")
+                    tst = [c.id for c in member.roles]
+                    if rola.id in tst:
+                        pass
+                    else:
+                        await self.bot.loop.create_task(member.add_roles(rola))
+                        membros_total += 1
+                        await ctx.channel.send(f"<a:Checkmark:763111771611201546> **{member.name}** recebeu o cargo ``{rola.name}``.",delete_after=15)
+                
+                if membros_total == 1:
+                    await ctx.send(f"{self.bot._emojis['incorreto']} Todos os membros já possuem o cargo ``{rola.name}``")
+                else:
+                    await ctx.send(f"<a:FuckMeBabe:763119842215329813> {membros_total} membros receberam o cargp ``{rola.name}``.")
             except Exception as e:
                 print(e)
     
