@@ -58,7 +58,7 @@ class comandos(commands.Cog):
     
 
         em = discord.Embed(colour=self.bot.cor, description="\n**[Prefixos]:** `c.comando`, `C.comando`\n")
-        em.set_author(name=f"{self.bot.user.name} | Comandos",icon_url=self.bot.user.avatar_url)
+        em.set_author(name=f"{self.bot.user.name} | Comandos")
         em.set_thumbnail(url=self.bot.user.avatar_url)
         
         for name, cog in self.bot.cogs.items():
