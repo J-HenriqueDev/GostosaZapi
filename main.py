@@ -15,6 +15,7 @@ class main(discord.ext.commands.Bot):
                          case_insensitive=True,
                          pm_help=None)
         
+        self.remove_command('help')
         self._emojis = emojis
         self.dono = secrets.DONO
         self.adms = secrets.ADMS

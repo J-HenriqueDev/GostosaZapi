@@ -17,11 +17,9 @@ class Owner(commands.Cog):
     @commands.guild_only()
     @commands.command()
     async def debug(self, ctx, *, args=None):
-        if not ctx.author.id in self.bot.dono:
-            await ctx.send(
-                f"<:unlike:760197986592096256> {ctx.author.mention} você não é um **administrador** para utilizar esse comando.",
-                delete_after=15)
-            return
+        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+          await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
+          return
         if args is None:
             embed = discord.Embed(description="**|** Olá {}, você não inseriu uma variável".format(ctx.author.mention),
                                   color=self.bot.cor)
@@ -62,11 +60,9 @@ class Owner(commands.Cog):
             
     @commands.command()
     async def reload(self, ctx, *, cog: str = None):
-        if not ctx.author.id in self.bot.dono:
-            await ctx.send(
-                f"<:unlike:760197986592096256> {ctx.author.mention} você não é um **administrador** para utilizar esse comando.",
-                delete_after=15)
-            return
+        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+          await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
+          return
         if cog is None:
             return await ctx.send(f"{ctx.author.mention} Não foi inserido a cog para recarregar!", delete_after=15)
         await ctx.message.delete()
@@ -91,11 +87,9 @@ class Owner(commands.Cog):
 
     @commands.command()
     async def reiniciar(self,ctx):
-        if not ctx.author.id in self.bot.dono:
-            await ctx.send(
-                f"<:unlike:760197986592096256> {ctx.author.mention} você não é um **administrador** para utilizar esse comando.",
-                delete_after=15)
-            return
+        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+          await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
+          return
         import os
         import sys
         await ctx.message.delete()
@@ -116,11 +110,9 @@ class Owner(commands.Cog):
         usage='c.desativarcomando <Nome do Comando>'
     )
     async def _desativarcomando(self, ctx, *, nome=None):
-        if not ctx.author.id in self.bot.dono:
-            await ctx.send(
-                f"<:unlike:760197986592096256> {ctx.author.mention} você não é um **administrador** para utilizar esse comando.",
-                delete_after=15)
-            return
+        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+          await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
+          return
         if nome is None:
             return await ctx.send(f"{ctx.author.mention} você não inseriu um comando pra desativar.", delete_after=20)
        
@@ -138,11 +130,9 @@ class Owner(commands.Cog):
 
     @commands.command(hidden=True)
     async def exec(self, ctx, *, body: str):
-        if not ctx.author.id in self.bot.dono:
-            await ctx.send(
-                f"<:unlike:760197986592096256> {ctx.author.mention} você não é um **administrador** para utilizar esse comando.",
-                delete_after=15)
-            return
+        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+          await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
+          return
         def clean(content):
             if content.startswith('```') and content.endswith('```'):
                 return '\n'.join(content.split('\n')[1:-1])
@@ -193,7 +183,10 @@ class Owner(commands.Cog):
 
 
     @commands.command()
-    async def arromba(self, ctx,*, rola :discord.Role =  None):      
+    async def roleall(self, ctx,*, rola :discord.Role =  None):
+        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+          await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
+          return      
         membros_total = 1 
         if rola is None:
             return await ctx.send("espeficique o cargo")
@@ -223,10 +216,16 @@ class Owner(commands.Cog):
     
     @commands.command()
     async def check(self, ctx):
+        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+          await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
+          return   
         cargo = ctx.guild.get_role(759814435031875586)
         try:
             for member in ctx.guild.members:
-                await self.bot.loop.create_task(member.add_roles(cargo))
+                if member.bot:
+                    pass
+                else:
+                    await self.bot.loop.create_task(member.add_roles(cargo))
         except Exception as e:
             print(e)
             

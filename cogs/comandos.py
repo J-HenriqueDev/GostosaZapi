@@ -15,12 +15,67 @@ class comandos(commands.Cog):
     @commands.bot_has_permissions(embed_links=True)
     @commands.command(description='Mostra o meu ping', usage='c.ping')
     async def ping(self, ctx):
+        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+          await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
+          return
         embed = discord.Embed(title="🏓 Pong!",
                               description=f' No Momento estou com: **{round(self.bot.latency * 1000)}ms**.',
                               color=0x36393f)
         embed.set_footer(text=self.bot.user.name + " © 2020", icon_url=self.bot.user.avatar_url_as())
         await ctx.message.delete()
         await ctx.send(embed=embed, delete_after=90)
+
+    @commands.bot_has_permissions(embed_links=True)
+    @commands.command(description='Listagem e informações de todos os comandos públicos lançados até o momento',usage='c.ajuda',aliases=['help'])
+    async def ajuda(self, ctx, nome = None):
+        incorreto = self.bot._emojis["incorreto"]
+        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+          await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
+          return
+        if nome:
+            comando = self.bot.get_command(nome)
+            if not comando:
+                return await ctx.send(f"{incorreto }**{ctx.author.name}**! Não foi possível encontrar um comando chamado **`{nome[:15]}`**.", delete_after=15)
+
+            nome = comando.name
+            desc = comando.description
+            uso = comando.usage
+            if not desc: desc = "Descrição não definida."
+            if not uso: uso = "Modo de uso não definido."
+            if comando.aliases:
+                aliases = ', '.join([f"**`{alias}`**" for alias in comando.aliases])
+            else:
+                aliases = "Nenhuma abreviação."
+
+            embed = discord.Embed(colour=self.bot.cor)
+            embed.set_author(name=f"Informações do comando {nome}.")
+            embed.set_thumbnail(url=self.bot.user.avatar_url)
+            embed.set_footer(text=self.bot.user.name+" © 2020", icon_url=self.bot.user.avatar_url_as())
+            embed.add_field(name=f"**Uso**",value=f"`{uso}`")
+            embed.add_field(name=f"**Abreviações**",value=aliases)
+            embed.add_field(name=f"**Descrição**",value=f"`{desc}`")
+            return await ctx.send(embed=embed)
+    
+
+        em = discord.Embed(colour=self.bot.cor, description="\n**[Prefixos]:** `c.comando`, `C.comando`\n")
+        em.set_author(name=f"{self.bot.user.name} | Comandos",icon_url=self.bot.user.avatar_url)
+        em.set_thumbnail(url=self.bot.user.avatar_url)
+        
+        for name, cog in self.bot.cogs.items():
+            cmds = [c for c in cog.get_commands() if not c.hidden]
+            value = '| '.join([f'`{c}`' for c in cmds])
+
+            if value:
+                em.add_field(name=f'**Comandos de {name}**: ({len(cmds)})', value=value, inline=True)
+        em.add_field(
+            name='\u200b',
+            value=f'Digite **{ctx.prefix}{ctx.invoked_with} <Comando>** para ver mais ' \
+                'informações sobre um comando.',
+            inline=True
+        )
+        em.set_footer(text=self.bot.user.name+" © 2020", icon_url=self.bot.user.avatar_url_as())
+        await ctx.send(embed=em)
+
 
 
     """
@@ -75,6 +130,9 @@ class comandos(commands.Cog):
     
     @commands.command(name='hug', aliases=['abraço'])
     async def hug(self, ctx, member : discord.Member, membro = None):
+        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+          await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
+          return
         hug_img = ['http://media1.tenor.com/images/e58eb2794ff1a12315665c28d5bc3f5e/tenor.gif?itemid=10195705',
                     'http://media1.tenor.com/images/949d3eb3f689fea42258a88fa171d4fc/tenor.gif?itemid=4900166',
                     'http://media1.tenor.com/images/11889c4c994c0634cfcedc8adba9dd6c/tenor.gif?itemid=5634578',
@@ -169,6 +227,9 @@ class comandos(commands.Cog):
     @commands.guild_only()
     @commands.command()
     async def clear(self,ctx,* ,num=None):
+        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+          await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
+          return
         correto = self.bot._emojis['correto']
         incorreto = self.bot._emojis['incorreto']
         if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
@@ -197,9 +258,9 @@ class comandos(commands.Cog):
         
     @commands.command()
     async def clean(self,ctx, amount: int): 
-        if not str(ctx.channel.id) in self.bot.canais and not str(ctx.message.author.id) in self.bot.staff:
-            await ctx.message.add_reaction(":incorreto:594222819064283161")
-            return
+        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+          await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
+          return
         await ctx.channel.purge(limit=amount)
         f = open('cogs/img/deletedTxts.txt', 'a')
         async for message in ctx.channel.history(limit=amount):

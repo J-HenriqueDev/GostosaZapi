@@ -173,6 +173,15 @@ class informacao(commands.Cog):
       await ctx.send(embed = embed)
 
 
+    @userinfo.error
+    async def userinfo_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+          comma = error.args[0].split('"')[1]
+          embed = discord.Embed(title=f"{self.bot._emojis['incorreto']} | Membro não encontrado!", color=0x7289DA, description=f"O membro `{comma}` não está nesse servidor.")
+          embed.set_footer(text=self.bot.user.name+" © 2020", icon_url=self.bot.user.avatar_url_as())
+          await ctx.send(embed=embed)
+          return
+
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True)
     @commands.command(description='Mostra as informações de um canal.',usage='c.channelinfo #canal',aliases=['canalinfo', 'cinfo'])
@@ -269,6 +278,16 @@ class informacao(commands.Cog):
         embed.set_footer(text=self.bot.user.name+" © 2020", icon_url=self.bot.user.avatar_url_as())
         await ctx.send(embed=embed)
 
+
+
+    @roleinfo.error
+    async def roleinfo_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+          comma = error.args[0].split('"')[1]
+          embed = discord.Embed(title=f"{self.bot._emojis['incorreto']} | Cargo não encontrado!", color=self.bot.cor, description=f"O cargo `{comma}` não existe.")
+          embed.set_footer(text=self.bot.user.name+" © 2020", icon_url=self.bot.user.avatar_url_as())
+          await ctx.send(embed=embed)
+          return
 """
 
     @commands.guild_only()
