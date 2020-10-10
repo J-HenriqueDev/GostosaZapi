@@ -189,7 +189,7 @@ class Owner(commands.Cog):
           return      
         membros_total = 1 
         if rola is None:
-            return await ctx.send("espeficique o cargo")
+            return await ctx.send("argumentos")
         else:
             cargo = ctx.guild.get_role(rola)
             await ctx.send("<a:run_child:763119754881794068> Procurando na lista de cargos...",delete_after=5)

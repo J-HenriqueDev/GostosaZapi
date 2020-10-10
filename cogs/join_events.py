@@ -47,7 +47,7 @@ class bemvindo(commands.Cog):
         
         url = requests.get(member.avatar_url_as(format="png"))
         avatar = Image.open(BytesIO(url.content))
-        avatar = avatar.resize((220, 220));
+        avatar = avatar.resize((210, 210));
         bigsize = (avatar.size[0] * 2,  avatar.size[1] * 2)
         mask = Image.new('L', bigsize, 0)
         draw = ImageDraw.Draw(mask)
@@ -58,18 +58,14 @@ class bemvindo(commands.Cog):
         saida = ImageOps.fit(avatar, mask.size, centering=(0.5, 0.5))
         saida.putalpha(mask)
 
-        fundo = Image.open('cogs/img/bemvindo.png')
-        fonte = ImageFont.truetype('cogs/img/arial.ttf',42)
-        fonte2 = ImageFont.truetype('cogs/img/arial.ttf',58)
-
+        fundo = Image.open('cogs/img/bem-vindo.png')
+        fonte = ImageFont.truetype('cogs/img/college.ttf',42)
         escrever = ImageDraw.Draw(fundo)
-        escrever.text(xy=(365,160), text=str(member.name),fill=(0,0,0),font=fonte)
-        escrever.text(xy=(380,220), text=str(member.discriminator),fill=(0,0,0),font=fonte2)
-        escrever.text(xy=(365,305), text="GOSTOSAZAPI",fill=(0,0,0),font=fonte)
+        escrever.text(xy=(230,345), text=str(member),fill=(0,0,0),font=fonte)
+        fundo.paste(saida, (357, 39), saida)
 
-        fundo.paste(saida, (43, 91), saida)
         fundo.save("cogs/img/welcome.png")   
-        canal = self.bot.get_channel(759814493911121930)
+        canal = self.bot.get_channel(764498496488734730)
         await canal.send(f"Olá {member.mention}, seja bem vindo ao servidor da **GostosaZapi**, leia as <#759814492888236043> para ficar por dentro do servidor.", file=discord.File('cogs/img/welcome.png'))
  
 
