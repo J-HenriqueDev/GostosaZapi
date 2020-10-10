@@ -45,6 +45,7 @@ class bemvindo(commands.Cog):
         
         ###################################################################
         
+        print(f"{member} entrou ")
         url = requests.get(member.avatar_url_as(format="png"))
         avatar = Image.open(BytesIO(url.content))
         avatar = avatar.resize((210, 210));
@@ -60,6 +61,7 @@ class bemvindo(commands.Cog):
 
         fundo = Image.open('cogs/img/bem-vindo.png')
         fonte = ImageFont.truetype('cogs/img/college.ttf',42)
+        
         escrever = ImageDraw.Draw(fundo)
         escrever.text(xy=(230,345), text=str(member),fill=(0,0,0),font=fonte)
         fundo.paste(saida, (357, 39), saida)
