@@ -4,6 +4,7 @@ import json
 from config import secrets
 from discord.ext import commands
 from utils.role import emojis
+from utils.role import cargos
 
 
 
@@ -16,6 +17,7 @@ class main(discord.ext.commands.Bot):
                          pm_help=None)
         
         self.remove_command('help')
+        self.cargo = cargos
         self._emojis = emojis
         self.dono = secrets.DONO
         self.adms = secrets.ADMS
