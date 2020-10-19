@@ -191,26 +191,28 @@ class Owner(commands.Cog):
         if rola is None:
             return await ctx.send("argumentos")
         else:
-            cargo = ctx.guild.get_role(rola)
+            #cargo = ctx.guild.get_role(rola)
             await ctx.send("<a:run_child:763119754881794068> Procurando na lista de cargos...",delete_after=5)
-            await asyncio.sleep(5)
-            await ctx.send(f"<a:Checkmark:763111771611201546> o cargo **{rola.name}** foi encontrado.",delete_after=5)
-            await asyncio.sleep(5)
-            await ctx.send("<a:WideTrump:763119810279374898> Iniciando o processo de adição em massa de cargos.",delete_after=15)
+            #await asyncio.sleep(5)
+            await ctx.send(f"<a:Checkmark:763111771611201546> o cargo **{rola.name}** foi encontrado.")
+            #await asyncio.sleep(5)
+            await ctx.send("<a:WideTrump:763119810279374898> Iniciando o processo de adição em massa de cargos.")
             try:
                 for member in ctx.guild.members:
                     tst = [c.id for c in member.roles]
                     if rola.id in tst:
                         pass
+                    elif member.bot:
+                        pass
                     else:
                         await self.bot.loop.create_task(member.add_roles(rola))
                         membros_total += 1
-                        await ctx.channel.send(f"<a:Checkmark:763111771611201546> **{member.name}** recebeu o cargo ``{rola.name}``.",delete_after=15)
+                        await ctx.channel.send(f"<a:Checkmark:763111771611201546> **{member}** recebeu o cargo ``{rola.name}``.")
                 
                 if membros_total == 1:
                     await ctx.send(f"{self.bot._emojis['incorreto']} Todos os membros já possuem o cargo ``{rola.name}``")
                 else:
-                    await ctx.send(f"<a:FuckMeBabe:763119842215329813> {membros_total} membros receberam o cargp ``{rola.name}``.")
+                    await ctx.send(f"<a:FuckMeBabe:763119842215329813> {membros_total} membros receberam o cargo ``{rola.name}``.")
             except Exception as e:
                 print(e)
     
