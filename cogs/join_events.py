@@ -68,7 +68,7 @@ class bemvindo(commands.Cog):
 
         fundo.save("cogs/img/welcome.png")   
         canal = self.bot.get_channel(764498496488734730)
-        await canal.send(f"Olá {member.mention}, seja bem vindo ao servidor da **GostosaZapi**, leia as <#759814492888236043> para ficar por dentro do servidor.", file=discord.File('cogs/img/welcome.png'))
+        await canal.send(f"Olá {member.mention}, seja bem vindo ao servidor da **{self.bot.get_user(760196609161822219)}**, leia as <#759814492888236043> para ficar por dentro do servidor.", file=discord.File('cogs/img/welcome.png'))
  
 
 
