@@ -30,7 +30,7 @@ class reaction(commands.Cog):
                 membro = guild.get_member(payload.user_id)
                 print(f"member : {membro}")
                 if cargo not in membro.roles:
-                    await membro.add_roles(cargo, reason=f"[{cargo.name}] Selecionou no canal #info")
+                    await membro.add_roles(cargo, reason=f"[{membro}] Selecionou a cor {cargo.name} no canal #info")
                     self.cooldown.append(payload.user_id)
                     await sleep(self.tempo)
                     self.cooldown.remove(payload.user_id)
@@ -51,7 +51,7 @@ class reaction(commands.Cog):
                 cargo = guild.get_role(cargo['id'])
                 membro = guild.get_member(payload.user_id)
                 if cargo in membro.roles:
-                    await membro.remove_roles(cargo, reason=f"[{cargo.name}] Selecionou no canal #info")
+                    await membro.remove_roles(cargo, reason=f"[{membro}] Selecionou a cor {cargo.name} no canal #info")
                     self.cooldown.append(payload.user_id)
                     await sleep(self.tempo)
                     self.cooldown.remove(payload.user_id)
