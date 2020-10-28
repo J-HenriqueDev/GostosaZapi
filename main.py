@@ -7,6 +7,7 @@ from utils.role import emojis
 from utils.role import cargos
 
 intents = discord.Intents.all()
+intents.members = True
 
 
 
@@ -14,7 +15,8 @@ class main(discord.ext.commands.Bot):
     def __init__(self):
         super().__init__(command_prefix=commands.when_mentioned_or(secrets.PREFIXO),
                          case_insensitive=True,
-                         pm_help=None, intents=intents)
+                         pm_help=None,
+                         intents=intents)
         
         self.remove_command('help')
         self.cargo = cargos
