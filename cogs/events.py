@@ -1,12 +1,17 @@
 import discord
+from unidecode import unidecode
+from columnar import columnar
 import asyncio
 from datetime import datetime
 import pytz
+import requests, json, os
 import re
 from discord.ext import commands
 aviso1 = []
 aviso2 = []
 aviso3 = []
+
+
 
 class events(commands.Cog):
     def __init__(self,bot):
@@ -210,6 +215,33 @@ class events(commands.Cog):
                 if canal is None:
                     return
                 await canal.send(embed=embed)
+
+    @commands.Cog.listener()
+    async def on_bulk_message_delete(self, message_list):
+        message_channel = message_list[0].channel
+        nome = unidecode(message_channel.name).replace("|", "")
+        filename = nome + "_as_" + datetime.now(pytz.timezone('America/Sao_Paulo')).strftime("%H_%M") + ".txt"
+        headers = ["USUARIO", "ID", "Conteudo", "horario"]
+        data = [[i.author.name + "#" + i.author.discriminator, i.author.id, i.content, i.created_at.strftime("%H:%M:%S - %d/%m/20%y")] for i in message_list]
+        table = columnar(data, headers, no_borders=True, terminal_width=200)
+        with open(filename, 'w+') as file:
+            file.write(table)
+
+        embed = discord.Embed(
+            title='Messages Bulk Deleted',
+            description=f'Messages bulk deleted from {message_channel.mention}. Deleted messages are available in the attached file.',
+            color=self.bot.cor,
+            timestamp=datetime.now(pytz.timezone('America/Sao_Paulo'))
+        )
+        channel = self.bot.get_channel(self.bot.logs)
+        file = open(filename, 'r')
+        await channel.send(embed=embed, file=discord.File(filename))
+        file.close()
+        #os.remove(filename)
+
+
+
+    
 
     @commands.Cog.listener()  
     async def on_member_join(self, member):
