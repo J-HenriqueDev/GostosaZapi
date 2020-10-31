@@ -3,14 +3,9 @@ import time
 import discord
 import datetime
 import aiohttp
-import json
-import typing
 import asyncio
 from discord.ext import commands
 
-
-from discord.utils import get
-from discord.ext.commands import has_permissions, MissingPermissions
 
 
 # gifs
@@ -119,7 +114,7 @@ class Interação(commands.Cog):
 
 
     @commands.guild_only()
-    @commands.command(name='endeline')
+    @commands.command(name='endeline',hidden=True)
     async def endeline(self, ctx):
         if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
           await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))

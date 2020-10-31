@@ -129,7 +129,7 @@ class Geral(commands.Cog):
             await ctx.send(file=discord.File('./files/imagem1.png'))
             """
     
-    @commands.command()
+    @commands.command(hidden=True)
     @commands.bot_has_permissions(embed_links=True)
     async def invites(self, ctx, *, user: str=None):
         """View how many invites you have or a user has"""
