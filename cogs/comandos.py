@@ -1,4 +1,5 @@
 ﻿import discord
+import math
 import asyncio
 import requests
 import time
@@ -8,7 +9,7 @@ from discord.ext import commands
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 from random import choice
 
-class comandos(commands.Cog):
+class Geral(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
 
@@ -128,99 +129,228 @@ class comandos(commands.Cog):
             await ctx.send(file=discord.File('./files/imagem1.png'))
             """
     
-    @commands.command(name='hug', aliases=['abraço'])
-    async def hug(self, ctx, member : discord.Member, membro = None):
-        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
-          await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
-          return
-        hug_img = ['http://media1.tenor.com/images/e58eb2794ff1a12315665c28d5bc3f5e/tenor.gif?itemid=10195705',
-                    'http://media1.tenor.com/images/949d3eb3f689fea42258a88fa171d4fc/tenor.gif?itemid=4900166',
-                    'http://media1.tenor.com/images/11889c4c994c0634cfcedc8adba9dd6c/tenor.gif?itemid=5634578',
-                    'http://media1.tenor.com/images/d7529f6003b20f3b21f1c992dffb8617/tenor.gif?itemid=4782499',
-                    'https://media1.tenor.com/images/7db5f172665f5a64c1a5ebe0fd4cfec8/tenor.gif?itemid=9200935',
-                    'https://media1.tenor.com/images/1069921ddcf38ff722125c8f65401c28/tenor.gif?itemid=11074788',
-                    'https://media1.tenor.com/images/3c83525781dc1732171d414077114bc8/tenor.gif?itemid=7830142',
-                    'https://media1.tenor.com/images/969f0f462e4b7350da543f0231ba94cb/tenor.gif?itemid=14246498',
-                    "https://media1.tenor.com/images/4d89d7f963b41a416ec8a55230dab31b/tenor.gif?itemid=5166500",
-                    "https://media1.tenor.com/images/b77fd0cfd95f89f967be0a5ebb3b6c6a/tenor.gif?itemid=7864716",
-                    "https://media1.tenor.com/images/6db54c4d6dad5f1f2863d878cfb2d8df/tenor.gif?itemid=7324587",
-                    "https://media1.tenor.com/images/2e155cdda36fc8f806931cd019e9a518/tenor.gif?itemid=15668356",
-                    "https://media1.tenor.com/images/5845f40e535e00e753c7931dd77e4896/tenor.gif?itemid=9920978",
-                    "https://media1.tenor.com/images/e58eb2794ff1a12315665c28d5bc3f5e/tenor.gif?itemid=10195705",
-                    "https://media1.tenor.com/images/7e30687977c5db417e8424979c0dfa99/tenor.gif?itemid=10522729",
-                    "https://media1.tenor.com/images/1069921ddcf38ff722125c8f65401c28/tenor.gif?itemid=11074788",
-                    "https://media1.tenor.com/images/506aa95bbb0a71351bcaa753eaa2a45c/tenor.gif?itemid=7552075",
-                    "https://media1.tenor.com/images/34a1d8c67e7b373de17bbfa5b8d35fc0/tenor.gif?itemid=8995974",
-                    "https://media1.tenor.com/images/18474dc6afa97cef50ad53cf84e37d08/tenor.gif?itemid=12375072",
-                    "https://media1.tenor.com/images/7db5f172665f5a64c1a5ebe0fd4cfec8/tenor.gif?itemid=9200935",
-                    "https://media1.tenor.com/images/40aed63f5bc795ed7a980d0ad5c387f2/tenor.gif?itemid=11098589",
-                    "https://media1.tenor.com/images/460c80d4423b0ba75ed9592b05599592/tenor.gif?itemid=5044460",
-                    "https://media1.tenor.com/images/daffa3b7992a08767168614178cce7d6/tenor.gif?itemid=15249774",
-                    "https://media1.tenor.com/images/b0de026a12e20137a654b5e2e65e2aed/tenor.gif?itemid=7552093",
-                    "https://media1.tenor.com/images/44b4b9d5e6b4d806b6bcde2fd28a75ff/tenor.gif?itemid=9383138",
-                    "https://media1.tenor.com/images/af76e9a0652575b414251b6490509a36/tenor.gif?itemid=5640885",
-                    "https://media1.tenor.com/images/45b1dd9eaace572a65a305807cfaec9f/tenor.gif?itemid=6238016",
-                    "https://media1.tenor.com/images/49a21e182fcdfb3e96cc9d9421f8ee3f/tenor.gif?itemid=3532079",
-                    "https://media1.tenor.com/images/d3dca2dec335e5707e668b2f9813fde5/tenor.gif?itemid=12668677",
-                    "https://media1.tenor.com/images/54e97e0cdeefea2ee6fb2e76d141f448/tenor.gif?itemid=11378437",
-                    "https://media1.tenor.com/images/aeb42019b0409b98aed663f35b613828/tenor.gif?itemid=14108949",
-                    "https://media1.tenor.com/images/1d91e026ddbb19e7b00bd06b1032ef69/tenor.gif?itemid=15546819",
-                    "https://media1.tenor.com/images/d6510db0a868cfbff697d7279aa89b61/tenor.gif?itemid=10989534",
-                    "https://media1.tenor.com/images/112c2abcf585b37e6c6950ebc3ab4168/tenor.gif?itemid=5960669",
-                    "https://media1.tenor.com/images/684efd91473dcfab34cb78bf16d211cf/tenor.gif?itemid=14495459",
-                    "https://media.giphy.com/media/qscdhWs5o3yb6/giphy.gif",
-                    "https://media.giphy.com/media/rSNAVVANV5XhK/giphy.gif",
-                    "https://thumbs.gfycat.com/JubilantImaginativeCuttlefish-max-1mb.gif",
-                    "https://media.giphy.com/media/svXXBgduBsJ1u/giphy.gif",
-                    "https://media.giphy.com/media/C4gbG94zAjyYE/giphy.gif",
-                    "https://thumbs.gfycat.com/AffectionateWelldocumentedKitfox-small.gif",
-                    "https://i.pinimg.com/originals/02/7e/0a/027e0ab608f8b84a25b2d2b1d223edec.gif",
-                    "https://78.media.tumblr.com/f95126745e7f608d3718adae179fad6e/tumblr_o6yw691YXE1vptudso1_500.gif",
-                    "https://i.pinimg.com/originals/4b/8f/5c/4b8f5ca7bf41461a19e3b4d1e64c1eb5.gif",
-                    "https://media1.tenor.com/images/6ac90d7bd8c1c3c61e6a317e4abf260e/tenor.gif?itemid=12668472",
-                    "https://media1.tenor.com/images/11b756289eec236b3cd8522986bc23dd/tenor.gif?itemid=10592083"]
-        hug = choice(hug_img)
-        embed = self.bot.embed(ctx)
-        embed.title = "Abraço"
-        embed.description = f"**{member}** Ele(a) recebeu um abraço de **{ctx.author.name}**! Que fofos!"
-        embed.set_image(url=hug)
+    @commands.command()
+    @commands.bot_has_permissions(embed_links=True)
+    async def invites(self, ctx, *, user: str=None):
+        """View how many invites you have or a user has"""
+        if not user:
+            user = ctx.author
+        elif "<" in user and "@" in user:
+            userid = user.replace("@", "").replace("<", "").replace(">", "").replace("!", "")
+            user2 = discord.utils.get(ctx.guild.members, id=int(userid))
+            if not user2:
+                user = discord.utils.get(self.bot.get_all_members(), id=int(userid))
+            else:
+                user = user2
+        elif "#" in user and user[len(user) - 4:].isdigit(): 
+            splituser = user.split("#")
+            user2 = discord.utils.get(ctx.guild.members, name=splituser[0], discriminator=splituser[1])
+            if not user2:
+                user = discord.utils.get(self.bot.get_all_members(), name=splituser[0], discriminator=splituser[1])
+            else:
+                user = user2
+        else:
+            try:
+                int(user)
+                user = await self.bot.get_user_info(user)
+            except:
+                user2 = discord.utils.get(ctx.guild.members, name=user)
+                if not user2:
+                    user = discord.utils.get(self.bot.get_all_members(), name=user)
+                else:
+                    user = user2
+        if not (isinstance(user, discord.Member) or isinstance(user, discord.User)):
+            return await ctx.send("I could not find that user :no_entry:")
+        amount = 0
+        total = 0
+        entries = {}
+        for x in await ctx.guild.invites():
+            if user == x.inviter:
+                amount += x.uses
+            total += x.uses
+        for x in await ctx.guild.invites():
+            if x.uses > 0:
+                if "user" not in entries:
+                    entries["user"] = {}
+                if str(x.inviter.id) not in entries["user"]:
+                    entries["user"][str(x.inviter.id)] = {}
+                if "uses" not in entries["user"][str(x.inviter.id)]:
+                    entries["user"][str(x.inviter.id)]["uses"] = 0
+                entries["user"][str(x.inviter.id)]["uses"] += x.uses
+        try: 
+            entries["user"]
+        except:
+            return await ctx.send("No-one has made an invite in this server :no_entry:")
+        if str(user.id) not in entries["user"]:
+            await ctx.send("{} has no invites :no_entry:".format(user))
+            return
+        sorted_invites = sorted(entries["user"].items(), key=lambda x: x[1]["uses"], reverse=True)
+        place = 0
+        percent = (amount/total)*100
+        if percent < 1:
+            percent = "<1"
+        else:
+            percent = round(percent)
+        for x in sorted_invites:
+            place += 1
+            if x[0] == str(user.id):
+                break 
+        await ctx.send("{} has **{}** invites which means they have the **{}** most invites. They have invited **{}%** of all users.".format(user, amount, self.prefixfy(place), percent))
+        del entries
 
-        msg = await ctx.send(embed=embed)
 
-        await msg.add_reaction("🔁")
+    @commands.command(aliases=["emotes", "emojis", "semotes", "semojis", "serveremojis"],hidden=True)
+    @commands.bot_has_permissions(embed_links=True)
+    async def serveremotes(self, ctx):
+        msg = ""
+        for x in ctx.guild.emojis:
+            if x.animated:
+                msg += "<a:{}:{}> ".format(x.name, x.id)
+            else:
+                msg += "<:{}:{}> ".format(x.name, x.id)
+        if msg == "":
+            await ctx.send("There are no emojis in this server :no_entry:")
+            return
+        else:
+            i = 0 
+            n = 2000
+            for x in range(math.ceil(len(msg)/2000)):
+                while msg[n-1:n] != " ":
+                    n -= 1
+                s=discord.Embed(description=msg[i:n])
+                i += n
+                n += n
+                if i <= 2000:
+                    s.set_author(name="{} Emojis".format(ctx.guild.name), icon_url=ctx.guild.icon_url)
+                await ctx.send(embed=s)
 
-        def check(reaction, user):
-            return user == member and str(reaction.emoji)
 
-            
+    @commands.command(hidden=True)
+    @commands.bot_has_permissions(embed_links=True)
+    async def createemote(self, ctx, emote: str=None):
+        if not emote:
+            if ctx.message.attachments:
+                url = ctx.message.attachments[0].url
+                split1 = url.split("/")
+                split2 = split1[6].split(".")
+                emotename = split2[0].replace("-", "_")
+            else:
+                await ctx.send("An image, url or emote is a required argument :no_entry:")
+                return
+        elif "https://" in emote or "http://" in emote:
+            url = emote
+            if "https://cdn.discordapp.com/attachments/" in url:
+                split1 = url.split("/")
+                split2 = split1[6].split(".")
+                emotename = split2[0].replace("-", "_")
+            else:
+                await ctx.send("Because you're uploading an image and i'm not able to grab the name, the emote needs a name respond with one below. (Respond Below)")
+                try:
+                    def check(m):
+                        return m.author == ctx.author and m.channel == ctx.channel
+                    response = await self.bot.wait_for("message", check=check, timeout=30)
+                    emotename = response.content.replace(" ", "_").replace("-", "_")
+                except asyncio.TimeoutError:
+                    await ctx.send("Timed out :stopwatch:")
+                    return
+        else:
+            try:
+                emote1 = self.bot.get_emoji(int(emote))
+                if not emote1:
+                    request = requests.get("https://cdn.discordapp.com/emojis/" + emote + ".gif")
+                    if request.text == "":
+                        url = "https://cdn.discordapp.com/emojis/" + emote + ".png"
+                    else:
+                        url = "https://cdn.discordapp.com/emojis/" + emote + ".gif"
+                    await ctx.send("I was unable to find this emote in any servers i am in so please provide a name for it below. (Respond Below)")
+                    try:
+                        def check(m):
+                            return m.author == ctx.author and m.channel == ctx.channel
+                        response = await self.bot.wait_for("message", check=check, timeout=30)
+                        emotename = response.content.replace(" ", "_").replace("-", "_")
+                    except asyncio.TimeoutError:
+                        await ctx.send("Timed out :stopwatch:")
+                        return
+                else:
+                    emotename = emote1.name
+                    url = emote1.url
+            except:
+                try:
+                    if emote.startswith("<a:"):
+                        splitemote = emote.split(":")
+                        emotename = splitemote[1]
+                        emoteid = str(splitemote[2])[:-1]
+                        extend = ".gif"
+                    else:
+                        splitemote = emote.split(":")
+                        emotename = splitemote[1]
+                        emoteid = str(splitemote[2])[:-1]
+                        extend = ".png"
+                except:
+                    await ctx.send("Invalid emoji :no_entry:")
+                    return
+                url = "https://cdn.discordapp.com/emojis/" + emoteid + extend
+        image = requests.get(url).content
+        try:
+            emoji = await ctx.guild.create_custom_emoji(name=emotename, image=image)
+        except discord.errors.Forbidden:
+            await ctx.send("I do not have the manage emojis permission :no_entry:")
+            return
+        except discord.errors.HTTPException:
+            await ctx.send("I was unable to make the emote this may be because you've hit the emote cap :no_entry:")
+            return
+        except:
+            await ctx.send("Invalid emoji/url (Check if it's been deleted or you've made a typo) :no_entry:")
+            return
+        await ctx.send("{} has been copied and created".format(emoji))
 
-        #def check(reaction, user):
-            #return user == member and str(reaction.emoji) == "🔁"
+    @commands.command(aliases=["ilb", "inviteslb"],hidden=True)
+    async def invitesleaderboard(self, ctx, page: int=None):
+        """View a leaderboard sorted by the users with the most invites"""
+        if not page:
+            page = 1
+        entries, total = {}, 0
+        for x in await ctx.guild.invites():
+            if x.uses > 0:
+                if "user" not in entries:
+                    entries["user"] = {}
+                if str(x.inviter.id) not in entries["user"]:
+                    entries["user"][str(x.inviter.id)] = {}
+                if "uses" not in entries["user"][str(x.inviter.id)]:
+                    entries["user"][str(x.inviter.id)]["uses"] = 0
+                entries["user"][str(x.inviter.id)]["uses"] += x.uses
+                total += x.uses
+        try: 
+            entries["user"]
+        except:
+            return await ctx.send("No-one has made an invite in this server :no_entry:")
+        if page < 1 or page > math.ceil(len(entries["user"])/10):
+            return await ctx.send("Invalid Page :no_entry:")
+        sorted_invites = sorted(entries["user"].items(), key=lambda x: x[1]["uses"], reverse=True)
+        msg, i, place = "", page*10-10, 0
+        for x in sorted_invites:
+            if str(ctx.author.id) in map(lambda x: x[0], sorted_invites):
+                place += 1
+                if x[0] == str(ctx.author.id):
+                    break 
+            else:
+                place = None
+        for x in sorted_invites[page*10-10:page*10]:
+            i += 1
+            percent = (x[1]["uses"]/total)*100
+            if percent < 1:
+                percent = "<1"
+            else:
+                percent = round(percent)
+            user = discord.utils.get(ctx.guild.members, id=int(x[0]))
+            if not user:
+                user = "Unknown user"
+            msg += "{}. `{}` - {:,} {} ({}%)\n".format(i, user, x[1]["uses"], "invite" if x[1]["uses"] == 1 else "invites", percent)
+        s=discord.Embed(title="Invites Leaderboard", description=msg, colour=0xed2939)
+        s.set_footer(text="{}'s Rank: {} | Page {}/{}".format(ctx.author.name, "#{}".format(place) if place else "Unranked", page, math.ceil(len(entries["user"])/10)), icon_url=ctx.author.avatar_url)
+        await ctx.send(embed=s)
 
-            
-        reaction, user = await self.bot.wait_for('reaction_add', check=check, timeout=120.0)
-
-        if reaction.emoji == '🔁':
-            Hugh = choice(hug_img)
-            embed = self.bot.embed(ctx)
-            embed.title = "Abraço"
-            embed.description = f"**{ctx.author.name}** Ele(a) recebeu um abraço de **{member.name}**! Que fofos!"
-            embed.set_image(url=Hugh)
-            ret = await ctx.send(embed=embed)
-
-            await ret.add_reaction("🔁")
         
-        def check1(reaction, user):
-            return user == ctx.author and str(reaction.emoji)
-
-        reaction, user = await self.bot.wait_for('reaction_add', check=check1, timeout=120.0)
-
-        if reaction.emoji == '🔁':
-            await ctx.send(f"poha {ctx.author.mention} já vai abraçar {member.mention} dnv? parte logo pro beijo karai")
-
-
-
-
 
 
     @commands.cooldown(1,10,commands.BucketType.user)
@@ -232,9 +362,6 @@ class comandos(commands.Cog):
           return
         correto = self.bot._emojis['correto']
         incorreto = self.bot._emojis['incorreto']
-        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
-            await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
-            return
 
         numero = int(num)
         if numero>100:
@@ -256,7 +383,7 @@ class comandos(commands.Cog):
             await asyncio.sleep(10)
             await msg.delete()
         
-    @commands.command()
+    @commands.command(hidden=True)
     async def clean(self,ctx, amount: int): 
         if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
           await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
@@ -269,10 +396,28 @@ class comandos(commands.Cog):
         f.close()
         await ctx.channel.purge(limit=amount)
         await ctx.send('Done!', delete_after=5)
+
+
+    def prefixfy(self, input):
+        number = str(input)
+        num = len(number) - 2
+        num2 = len(number) - 1
+        if int(number[num:]) < 11 or int(number[num:]) > 13:
+            if int(number[num2:]) == 1:
+                prefix = "st"
+            elif int(number[num2:]) == 2:
+                prefix = "nd"
+            elif int(number[num2:]) == 3:
+                prefix = "rd"
+            else:
+                prefix = "th"
+        else:
+            prefix = "th"
+        return number + prefix
         
 
 
     
 
 def setup(bot):
-    bot.add_cog(comandos(bot))
+    bot.add_cog(Geral(bot))
