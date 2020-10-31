@@ -59,7 +59,7 @@ class reaction(commands.Cog):
 
     
        
-    @commands.command()
+    @commands.command(hidden=True)
     async def raid(self,ctx ,role : discord.Role = None):
         role = discord.utils.get(ctx.guild.roles, name=str(role.name))
         if not role is None:

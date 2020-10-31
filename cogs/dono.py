@@ -15,6 +15,7 @@ class Owner(commands.Cog):
         self.bot=bot
 
     @commands.guild_only()
+    @commands.bot_has_permissions(embed_links=True)
     @commands.command()
     async def debug(self, ctx, *, args=None):
         if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
@@ -59,6 +60,7 @@ class Owner(commands.Cog):
             return
             
     @commands.command()
+    @commands.bot_has_permissions(embed_links=True)
     async def reload(self, ctx, *, cog: str = None):
         if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
           await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
@@ -86,6 +88,7 @@ class Owner(commands.Cog):
             print(f"RELOAD USADO POR : {ctx.author}")
 
     @commands.command()
+    @commands.bot_has_permissions(embed_links=True)
     async def reiniciar(self,ctx):
         if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
           await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
