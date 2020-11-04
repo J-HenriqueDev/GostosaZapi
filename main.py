@@ -5,6 +5,7 @@ from config import secrets
 from discord.ext import commands
 from utils.role import emojis
 from utils.role import cargos
+from pymongo import MongoClient
 
 intents = discord.Intents.all()
 intents.members = True
@@ -27,19 +28,27 @@ class main(discord.ext.commands.Bot):
         self._emojis = emojis
         self.dono = secrets.DONO
         self.adms = secrets.ADMS
+        self.database = secrets.DATAB
         self.errado = "<:errado:761205727841746954>"
         self.correto = "<:correto:761205727670829058>"
-        self.canais = ["759814502798721024","759814507336826880"]
-        self.logs = 759814509287440427
-        self.bans = 759814509287440427
-        self.guild = 758823253825028167
+        
+        
+        self.logsusers = 773567922526355496
+        self.logscargos = 772998619304951810
+        self.sugestao = 772972553769713735
+        self.canais = ["772972558605090836","772972567308664882"]
+        self.logs = 772972569326387232
+        self.bans = 772972568655298574
+        self.guild = 635624989193666591
+        self.regras = 772972551713587210
+        self.helper = 773518943490015233
+        
+        
         self.token = 'blz,talvez outro dia.'
         self.cor = 0xf10cdb
-        self.ecolor = 0xDD2E44
-        self.neutral = 0x36393F
+       
         self.carregados = 1
         self.falhas = 0
-        
         for file in [c for c in os.listdir("cogs") if c.endswith(".py")]:
                 name = file[:-3]
                 try:
@@ -49,7 +58,15 @@ class main(discord.ext.commands.Bot):
                 except Exception as e:
                     print(f"FALHA AO CARREGAR  [{file}] MODULO ERROR [{e}]")
                     self.falhas += 1
-
+        print("( * ) | Tentando se conectar ao banco de dados...")
+        try:
+            mongo = MongoClient(self.database)
+        except Exception as e:
+            print(f"\n<---------------->\n( ! ) | Erro na tentativa de conexão com o banco de dados!\n<----------->\n{e}\n<---------------->\n")
+            exit()
+    
+        self.db = mongo['bard']
+        print(f"( > ) | Conectado ao banco de dados!")
     
     
     def formatPrefix(self, ctx):
@@ -57,18 +74,14 @@ class main(discord.ext.commands.Bot):
         return ctx.prefix.replace(ctx.prefix, prefix)
 
     # Embeds
+    """
     def embed(self, ctx, invisible=False):
         color = self.neutral if invisible else self.cor
         emb = discord.Embed(color=color)
         emb.set_footer(text=self.user.name + " © 2020", icon_url=self.user.avatar_url_as())
         emb.timestamp = ctx.message.created_at
         return emb
-
-    def erEmbed(self, ctx, error='Erro!'):
-        emb = discord.Embed(title=f'<:unlike:760197986592096256> | {error}', color=self.ecolor)
-        emb.set_footer(text=f'Executado por {ctx.author.name}', icon_url=ctx.author.avatar_url)
-        emb.timestamp = ctx.message.created_at
-        return emb
+    """
 
     async def on_message(self, message):
         return

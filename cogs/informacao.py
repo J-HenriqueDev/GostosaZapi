@@ -50,26 +50,7 @@ class informacao(commands.Cog):
     @commands.bot_has_permissions(embed_links=True)
     @commands.command(description='Mostra algumas informações sobre mim.',usage='c.botinfo',aliases=['bot'])
     async def botinfo(self,ctx):
-      if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
-        await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
-        return
-      mem = botstatus.get_memory()
-      dono = await self.bot.fetch_user(478266814204477448)
-      embed = discord.Embed(description="Olá {}, este é o perfil do {} e nele contém algumas informações.".format(ctx.author.name, self.bot.user.name),colour=self.bot.cor)
-      embed.set_author(name="Informações do {}".format(self.bot.user.name), icon_url=ctx.author.avatar_url_as())
-      embed.add_field(name=f"{self.bot._emojis['dono']} Criador", value = f'``{dono}``')
-      embed.add_field(name=f"{self.bot._emojis['tag']} Tag", value = '``'+str(self.bot.user)+'``')
-      embed.add_field(name=f"{self.bot._emojis['ip']} ID", value = '``'+str(self.bot.user.id)+'``')
-      embed.add_field(name=f"{self.bot._emojis['api']} Api", value = '``Discord.py '+str(discord.__version__)+'``')
-      embed.add_field(name=f"{self.bot._emojis['python']} Python", value = '``'+str(sys.version[:5])+'``')
-      embed.add_field(name=f"{self.bot._emojis['ram']} Memória", value = '``'+str(mem["memory_used"])+'/'+str(mem["memory_total"])+' ('+str(mem["memory_percent"])+')``')
-      embed.add_field(name=f"{self.bot._emojis['timer']} Tempo de atividade", value = '``'+str(botstatus.timetotal()).replace("{day}","dia").replace("{hour}","hora").replace("{minute}","minuto").replace("{second}","segundo")+'``')
-      embed.add_field(name=f"{self.bot._emojis['guilds']} Servidores", value = '``'+str(len(self.bot.guilds))+' (shards '+"1"+')``')
-      embed.add_field(name=f"{self.bot._emojis['ping']} Lâtencia", value = '``{0:.2f}ms``'.format(self.bot.latency * 1000))
-      embed.add_field(name=f"{self.bot._emojis['cpu']} Porcentágem da CPU",value=f'``{botstatus.cpu_usage()}%``')
-      #embed.add_field(name=f"<:ping:564890304839417887> Processador", value=f'``{botstatus.host_name()}``')
-      embed.set_footer(text=self.bot.user.name+" © 2020", icon_url=self.bot.user.avatar_url_as())
-      await ctx.send(embed=embed)
+      await ctx.send('um dia terá algo aqui')
     
 
     @commands.bot_has_permissions(embed_links=True)
@@ -177,7 +158,7 @@ class informacao(commands.Cog):
     async def userinfo_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
           comma = error.args[0].split('"')[1]
-          embed = discord.Embed(title=f"{self.bot._emojis['incorreto']} | Membro não encontrado!", color=0x7289DA, description=f"O membro `{comma}` não está nesse servidor.")
+          embed = discord.Embed(title=f"{self.bot._emojis['incorreto']} | Membro não encontrado!", color=self.bot.cor, description=f"O membro `{comma}` não está nesse servidor.")
           embed.set_footer(text=self.bot.user.name+" © 2020", icon_url=self.bot.user.avatar_url_as())
           await ctx.send(embed=embed)
           return

@@ -7,6 +7,7 @@ import pytz
 import requests, json, os
 import re
 from discord.ext import commands
+from utils.Utils import difference_between_lists
 aviso1 = []
 aviso2 = []
 aviso3 = []
@@ -112,7 +113,7 @@ class events(commands.Cog):
 
 
         elif isinstance(error, commands.CommandError):
-            logs = self.bot.get_channel(763097493557739520)
+            logs = self.bot.get_channel(773515801793134602)
             em = discord.Embed(
                 colour=self.bot.cor,
                 description=f"```py\n{error}```",
@@ -147,7 +148,7 @@ class events(commands.Cog):
 
   ##########################################################################   
       
-      if message.channel.id == 759814496419708959:
+      if message.channel.id == self.bot.sugestao:
           await message.add_reaction('<:like:760197986609004584>')
           return await message.add_reaction('<:unlike:760197986592096256>')
 
@@ -156,7 +157,7 @@ class events(commands.Cog):
 
 
       if re.search(r'discord(?:app\\?[\s\S]com\\?\/invite|\\?[\s\S]gg|\\?[\s\S]me)\/', message.content) or re.search(r'invite\\?[\s\S]gg\\?\/[\s\S]', message.content) or "privatepage" in message.content.lower() or "naked" in message.content.lower():
-        if str("</Link>") in [r.name for r in message.author.roles if r.name != "@everyone"]:
+        if str("💼┃Parceiro") in [r.name for r in message.author.roles if r.name != "@everyone"] or str("772972507002568705") in [r.id for r in message.author.roles if r.name != "@everyone"]:
             print("OK")
             
         else:
@@ -179,7 +180,7 @@ class events(commands.Cog):
             aviso1.remove(message.author.id)     
             aviso2.remove(message.author.id)       
             print('ban')
-            await message.author.send("pow pra que divulgar mano?\n\n~~não responda essa mensagem~~")
+            #await message.author.send("pow pra que divulgar mano?\n\n~~não responda essa mensagem~~")
             await message.author.ban(reason="Divulgando.")
 
     @commands.Cog.listener()
@@ -268,6 +269,57 @@ class events(commands.Cog):
         file.close()
         #os.remove(filename)
 
+    @commands.Cog.listener()
+    async def on_member_update(self, before, after):
+        if after.bot: return
+        if not self.bot.is_ready(): return
+        if before.nick != after.nick:
+            embed = discord.Embed(title='Nick alterado',
+                                    colour=self.bot.cor,
+                                    description=f'O(A) {after.name} mudou de nick!\n'
+                                                f'User: {after.mention}\n'
+                                                f'Id: {after.id}\n'
+                                                f'Nick antigo: {before.nick}\n'
+                                                f'Nick novo: {after.nick}',
+                                    timestamp=datetime.utcnow())
+            embed.set_thumbnail(url=str(after.avatar_url))
+            channel = before.guild.get_channel(self.bot.logusers)
+            await channel.send(embed=embed)
+        if before.roles != after.roles:
+                cargos = [f'<@&{c.id}>' for c in difference_between_lists(before.roles, after.roles)]
+                # se a pessoa ficou com mais cargos, do que ela tinha antes
+                if len(before.roles) < len(after.roles):
+                    desc = None
+                    if len(cargos) == 1:
+                        desc = f'Novo cargo: {cargos[0]}'
+                    elif len(cargos) > 1:
+                        desc = 'Novos cargo: ' + ', '.join(cargos)
+                else:  # se foi o contrário
+                    desc = None
+                    if len(cargos) == 1:
+                        desc = f'Cargo removido: {cargos[0]}'
+                    elif len(cargos) > 1:
+                        desc = 'Cargos removidos: ' + ', '.join(cargos)
+                embed = discord.Embed(title='Cargos alterados',
+                                        colour=self.bot.cor,
+                                        description=f'O(A) {after.name} sofreu alteração nos cargos!\n'
+                                                    f'User: {after.mention}\n'
+                                                    f'Id: {after.id}\n'
+                                                    f'{desc}',
+                                        timestamp=datetime.utcnow())
+                embed.set_thumbnail(url=str(after.avatar_url))
+                channel_cargos = self.bot.get_channel(self.bot.logscargos)
+                await channel_cargos.send(embed=embed)
+        if (before.premium_since is None) and (after.premium_since is not None):
+                embed = discord.Embed(title='Novo booster',
+                                        colour=self.bot.cor,
+                                        description=f'O(A) {after.name} começou a dar boost!\n'
+                                                    f'User: {after.mention}\n'
+                                                    f'Id: {after.id}\n',
+                                        timestamp=datetime.utcnow())
+                embed.set_thumbnail(url=str(after.avatar_url))
+                logsboost = self.bot.get_channel(772972566402826242)
+                await logsboost.send(embed=embed)
 
 
     
@@ -275,7 +327,7 @@ class events(commands.Cog):
     @commands.Cog.listener()  
     async def on_member_join(self, member):
       try:
-        dev = member.guild.get_role(759814435031875586)
+        dev = member.guild.get_role(772972512711409725)
         await member.add_roles(dev)
       except:
         pass

@@ -293,11 +293,10 @@ class Interação(commands.Cog):
             membro = ctx.author
         else:
             if ctx.author == member == membro:
-                await ctx.invoke(self.bot.get_command('endeline'))
-                await msg.delete()
+                await ctx.invoke(self.bot.get_command('beija'), member, ctx.author)
 
         """<membro>: Use isso com amor <3."""
-        gif1 = random.choice(slap)
+        #gif1 = random.choice(slap)
         gif2 = random.choice(kiss)
         beija2 = '{} **deu um beijo em** {}'.format(membro.mention, member.mention)
 

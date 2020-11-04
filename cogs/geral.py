@@ -67,12 +67,12 @@ class Geral(commands.Cog):
             value = '| '.join([f'`{c}`' for c in cmds])
 
             if value:
-                em.add_field(name=f'**Comandos de {name}**: ({len(cmds)})', value=value, inline=True)
+                em.add_field(name=f'**Comandos de {name}**: ({len(cmds)})', value=value, inline=False)
         em.add_field(
             name='\u200b',
             value=f'Digite **{ctx.prefix}{ctx.invoked_with} <Comando>** para ver mais ' \
                 'informações sobre um comando.',
-            inline=True
+            inline=False
         )
         em.set_footer(text=self.bot.user.name+" © 2020", icon_url=self.bot.user.avatar_url_as())
         await ctx.send(embed=em)
@@ -129,10 +129,9 @@ class Geral(commands.Cog):
             await ctx.send(file=discord.File('./files/imagem1.png'))
             """
     
-    @commands.command(hidden=True)
+    @commands.command(description='Mostra a quantidade de invites de um Membro.',usage='c.invites <@Membro>',aliases=["invite","convidados"],hidden=True)
     @commands.bot_has_permissions(embed_links=True)
     async def invites(self, ctx, *, user: str=None):
-        """View how many invites you have or a user has"""
         if not user:
             user = ctx.author
         elif "<" in user and "@" in user:
@@ -160,7 +159,11 @@ class Geral(commands.Cog):
                 else:
                     user = user2
         if not (isinstance(user, discord.Member) or isinstance(user, discord.User)):
-            return await ctx.send("I could not find that user :no_entry:")
+            comma = user.args[0].split('"')[1]
+            embed = discord.Embed(title=f"{self.bot._emojis['incorreto']} | Membro não encontrado!", color=self.bot.cor, description=f"O membro `{comma}` não está nesse servidor.")
+            embed.set_footer(text=self.bot.user.name+" © 2020", icon_url=self.bot.user.avatar_url_as())
+            await ctx.send(embed=embed)
+            return
         amount = 0
         total = 0
         entries = {}
@@ -199,7 +202,7 @@ class Geral(commands.Cog):
         del entries
 
 
-    @commands.command(aliases=["emotes", "emojis", "semotes", "semojis", "serveremojis"],hidden=True)
+    @commands.command(description="Mostra todos os emojis deste servidor. ",aliases=["emotes", "emojis", "semotes", "semojis", "serveremojis"],hidden=True,usage="c.emojis")
     @commands.bot_has_permissions(embed_links=True)
     async def serveremotes(self, ctx):
         msg = ""
@@ -209,7 +212,9 @@ class Geral(commands.Cog):
             else:
                 msg += "<:{}:{}> ".format(x.name, x.id)
         if msg == "":
-            await ctx.send("There are no emojis in this server :no_entry:")
+            embed = discord.Embed(title=f"{self.bot._emojis['incorreto']} | Emojis Inexistentes!", color=self.bot.cor, description=f"Este servidor não tem nenhum emoji adicionado.\nuse ``c.addemoji`` para adicionar novos emojis.")
+            embed.set_footer(text=self.bot.user.name+" © 2020", icon_url=self.bot.user.avatar_url_as())
+            await ctx.send(embed=embed)
             return
         else:
             i = 0 
@@ -225,8 +230,9 @@ class Geral(commands.Cog):
                 await ctx.send(embed=s)
 
 
-    @commands.command(hidden=True)
+    @commands.command(description='Adiciona um emoji neste servidor a partir de um link, imagem ou outro emoji já criado.',usage='c.addemoji <URL ou Emoji>',hidden=True)
     @commands.bot_has_permissions(embed_links=True)
+    @commands.bot_has_permissions(manage_emojis=True)
     async def createemote(self, ctx, emote: str=None):
         if not emote:
             if ctx.message.attachments:
@@ -304,9 +310,9 @@ class Geral(commands.Cog):
             return
         await ctx.send("{} has been copied and created".format(emoji))
 
-    @commands.command(aliases=["ilb", "inviteslb"],hidden=True)
-    async def invitesleaderboard(self, ctx, page: int=None):
-        """View a leaderboard sorted by the users with the most invites"""
+    @commands.command(description='Mostra a lista dos maiores invitantes do servidor.',usage='c.topinviters',aliases=["ilb", "inviteslb","topinvite"],hidden=True)
+    @commands.bot_has_permissions(embed_links=True)
+    async def topinviters(self, ctx, page: int=None):
         if not page:
             page = 1
         entries, total = {}, 0
@@ -325,7 +331,7 @@ class Geral(commands.Cog):
         except:
             return await ctx.send("No-one has made an invite in this server :no_entry:")
         if page < 1 or page > math.ceil(len(entries["user"])/10):
-            return await ctx.send("Invalid Page :no_entry:")
+            return await ctx.send("Página Inválida")
         sorted_invites = sorted(entries["user"].items(), key=lambda x: x[1]["uses"], reverse=True)
         msg, i, place = "", page*10-10, 0
         for x in sorted_invites:
@@ -344,18 +350,20 @@ class Geral(commands.Cog):
                 percent = round(percent)
             user = discord.utils.get(ctx.guild.members, id=int(x[0]))
             if not user:
-                user = "Unknown user"
+                user = "Usuário não encontrado"
             msg += "{}. `{}` - {:,} {} ({}%)\n".format(i, user, x[1]["uses"], "invite" if x[1]["uses"] == 1 else "invites", percent)
-        s=discord.Embed(title="Invites Leaderboard", description=msg, colour=0xed2939)
-        s.set_footer(text="{}'s Rank: {} | Page {}/{}".format(ctx.author.name, "#{}".format(place) if place else "Unranked", page, math.ceil(len(entries["user"])/10)), icon_url=ctx.author.avatar_url)
+        s=discord.Embed(title="TOP Inviters", description=msg, colour=0xed2939)
+        s.set_footer(text="{}'s Rank: {} | Página {}/{}".format(ctx.author.name, "#{}".format(place) if place else "Unranked", page, math.ceil(len(entries["user"])/10)), icon_url=ctx.author.avatar_url)
         await ctx.send(embed=s)
 
         
 
-
-    @commands.cooldown(1,10,commands.BucketType.user)
     @commands.guild_only()
-    @commands.command()
+    @commands.cooldown(1,10,commands.BucketType.user)
+    @commands.bot_has_permissions(manage_messages=True)
+    @commands.bot_has_permissions(embed_links=True)
+    @commands.has_permissions(ban_members=True)
+    @commands.command(description='Apaga uma quantidade definida de mensagens de um canal.',usage='c.clear 75',aliases=["purge","limpar"])
     async def clear(self,ctx,* ,num=None):
         if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
           await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))

@@ -9,16 +9,62 @@ import traceback
 import textwrap
 import time
 import sys
+from pymongo import MongoClient
 
 class Owner(commands.Cog):
     def __init__(self, bot):
         self.bot=bot
 
+    @commands.command(
+      name='delrep',
+      description='Reseta os pontos mensais de reputação de todos os helpers',
+      usage='c.delrep'
+    )
+    async def _resetarreps(self, ctx):     
+        if not ctx.author.id in self.bot.dono:
+            await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
+            return
+        mongo = MongoClient(self.bot.database)
+        bard = mongo['bard']
+        users = bard['users']
+        bard.users.update_many({}, {"$set": {"reputação": 0}})
+        await ctx.send(f"{self.bot._emojis['correto']}> | **{ctx.author.name}**, a reputação dos NewHelpers foram resetadas.")
+
+    @commands.command(aliases=["set","setar","setarreps","setareps"],description="Seta a Quantidade de reps de um usuário.",use="c.setreps @user [número de reps]")
+    async def setreps(self, ctx , user: discord.Member = None, quantidade : str = None):
+        if not ctx.author.id in self.bot.dono:
+            await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
+            return
+        if user is None:
+            return await ctx.send(f":facepalm: | **{ctx.author.name}** você não especificou um usuário.")
+        if quantidade is None:
+            return await ctx.send(f"{self.bot._emojis['incorreto']} |**{ctx.author.name}** você não especificou a quantidade de reps que deseja setar para {user.name}.")
+        mongo = MongoClient(self.bot.database)
+        bard = mongo['bard']
+        users = bard['users']
+        users = bard.users.find_one({"_id": str(ctx.author.id)})
+        if users is None:
+            bard.users.update({"_id": str(user.id)}, {"$set": {"reputação": quantidade}})
+            await ctx.send(f'{self.bot._emojis["correto"]}**{ctx.author.name}** você definiu a quantidade de reps do usuário `{user.name}` para `{quantidade}`.')
+        else:
+            await ctx.send(f':facepalm: | **{ctx.author.name}** o usuário `{user.name}` não está registrado na database.')
+    
+
+    @setreps.error
+    async def setreps_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            comma = error.args[0].split('"')[1]
+            embed = discord.Embed(title=f"{self.bot._emojis['incorreto']} | MEMBRO INVÁLIDO!", color=self.bot.cor, description=f"O membro `{comma}` não foi encontrado.")
+            await ctx.send(embed=embed)
+            return
+    
+    
+    
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True)
     @commands.command()
     async def debug(self, ctx, *, args=None):
-        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+        if not ctx.author.id in self.bot.dono:
           await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
           return
         if args is None:
@@ -62,7 +108,7 @@ class Owner(commands.Cog):
     @commands.command()
     @commands.bot_has_permissions(embed_links=True)
     async def reload(self, ctx, *, cog: str = None):
-        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+        if not ctx.author.id in self.bot.dono:
           await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
           return
         if cog is None:
@@ -90,7 +136,7 @@ class Owner(commands.Cog):
     @commands.command()
     @commands.bot_has_permissions(embed_links=True)
     async def reiniciar(self,ctx):
-        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+        if not ctx.author.id in self.bot.dono:
           await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
           return
         import os
@@ -113,7 +159,7 @@ class Owner(commands.Cog):
         usage='c.desativarcomando <Nome do Comando>'
     )
     async def _desativarcomando(self, ctx, *, nome=None):
-        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+        if not ctx.author.id in self.bot.dono:
           await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
           return
         if nome is None:
@@ -133,7 +179,7 @@ class Owner(commands.Cog):
 
     @commands.command(hidden=True)
     async def exec(self, ctx, *, body: str):
-        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+        if not ctx.author.id in self.bot.dono:
           await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
           return
         def clean(content):
@@ -187,9 +233,9 @@ class Owner(commands.Cog):
 
     @commands.command()
     async def roleall(self, ctx,*, rola :discord.Role =  None):
-        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+        if not ctx.author.id in self.bot.dono:
           await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
-          return      
+          return   
         membros_total = 1 
         if rola is None:
             return await ctx.send("argumentos")
@@ -221,9 +267,9 @@ class Owner(commands.Cog):
     
     @commands.command()
     async def check(self, ctx):
-        if not str(ctx.channel.id) in self.bot.canais and not ctx.author.id in self.bot.dono and not ctx.author.id in self.bot.adms:
+        if not ctx.author.id in self.bot.dono:
           await ctx.message.add_reaction(self.bot._emojis["incorreto"].replace("<"," ").replace(">"," "))
-          return   
+          return 
         cargo = ctx.guild.get_role(759814435031875586)
         try:
             for member in ctx.guild.members:
