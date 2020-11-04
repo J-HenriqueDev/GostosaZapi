@@ -105,16 +105,7 @@ class main(discord.ext.commands.Bot):
         
 bot = main()
 
-@bot.check
-async def blacklist(ctx):
-    with open('cogs/utils/users_banned.json') as bn:
-        jsn = json.load(bn)
-    if str(ctx.author.id) in jsn and not ctx.author.id == bot.dono:
-        reason = jsn[str(ctx.author.id)]
-        embed = discord.Embed(title=f'<:unlike:760197986592096256> | Sem permissão!', description=f'Você foi banido de usar qualquer comando meu, o motivo é:\n`{reason}`', color=bot.ecolor)
-        await ctx.send(embed=embed)
-        return False
-    return True
+
 
 if __name__ == '__main__':
     try:
