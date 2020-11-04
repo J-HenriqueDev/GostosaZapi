@@ -323,7 +323,7 @@ class events(commands.Cog):
 
 
     
-
+    '''
     @commands.Cog.listener()  
     async def on_member_join(self, member):
       try:
@@ -331,7 +331,7 @@ class events(commands.Cog):
         await member.add_roles(dev)
       except:
         pass
-
+        '''
 
 def setup(bot):
     bot.add_cog(events(bot))
