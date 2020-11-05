@@ -11,7 +11,6 @@ intents = discord.Intents.all()
 intents.members = True
 
 
-
 class main(discord.ext.commands.Bot):
     def __init__(self):
         super().__init__(command_prefix=commands.when_mentioned_or(secrets.PREFIXO),
@@ -65,23 +64,11 @@ class main(discord.ext.commands.Bot):
             print(f"\n<---------------->\n( ! ) | Erro na tentativa de conexão com o banco de dados!\n<----------->\n{e}\n<---------------->\n")
             exit()
     
-        self.db = mongo['bard']
+        self.db = mongo['insiders']
         print(f"( > ) | Conectado ao banco de dados!")
     
-    
-    def formatPrefix(self, ctx):
-        prefix = ctx.prefix if not str(self.user.id) in ctx.prefix else f'@{ctx.me} '
-        return ctx.prefix.replace(ctx.prefix, prefix)
 
-    # Embeds
-    """
-    def embed(self, ctx, invisible=False):
-        color = self.neutral if invisible else self.cor
-        emb = discord.Embed(color=color)
-        emb.set_footer(text=self.user.name + " © 2020", icon_url=self.user.avatar_url_as())
-        emb.timestamp = ctx.message.created_at
-        return emb
-    """
+
 
     async def on_message(self, message):
         if message.guild is None:
@@ -118,8 +105,6 @@ class main(discord.ext.commands.Bot):
        
         
         
-bot = main()
-
 
 
 if __name__ == '__main__':
