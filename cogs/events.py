@@ -134,54 +134,58 @@ class events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-      if message.author.bot:
-        return
-        
-      await self.bot.wait_until_ready()
+        if message.guild is None:
+          return 
 
-      ctx = await self.bot.get_context(message)
-      if message.content.replace('!', '') == ctx.me.mention:
-          ctx.prefix = ctx.me.mention
-          ctx.args = None
-          ctx.author = message.author
-      await self.bot.invoke(ctx)
+        if message.author.bot or not message.channel.permissions_for(message.guild.me).send_messages:
+          return
+       
+        ctx = await self.bot.get_context(message)
+       
+        if not ctx.valid:
+          return
+       
+        try:
+            await self.bot.invoke(ctx)
+        except Exception as e:
+            self.bot.dispatch('command_error', ctx, e)
 
   ##########################################################################   
       
-      if message.channel.id == self.bot.sugestao:
-          await message.add_reaction('<:like:760197986609004584>')
-          return await message.add_reaction('<:unlike:760197986592096256>')
+        if message.channel.id == self.bot.sugestao:
+            await message.add_reaction('<:like:760197986609004584>')
+            return await message.add_reaction('<:unlike:760197986592096256>')
 
 
-################################################################################
+    ################################################################################
 
 
-      if re.search(r'discord(?:app\\?[\s\S]com\\?\/invite|\\?[\s\S]gg|\\?[\s\S]me)\/', message.content) or re.search(r'invite\\?[\s\S]gg\\?\/[\s\S]', message.content) or "privatepage" in message.content.lower() or "naked" in message.content.lower():
-        if str("💼┃Parceiro") in [r.name for r in message.author.roles if r.name != "@everyone"] or str("772972507002568705") in [r.id for r in message.author.roles if r.name != "@everyone"]:
-            print("OK")
-            
-        else:
-          if not message.author.id in aviso1:
-            aviso1.append(message.author.id)
-            await message.delete()
-            embed=discord.Embed(description=f" <:unlike:760197986592096256> **|** Olá {message.author.mention}, não é permitido **CONVITES** de outros servidores sem a permissão dos **ADMINISTRADORES** segundo as regras.\nTendo isso em mente irei avisa-lo esse é seu **1° Strike**.\nNo **3° Strike** você será banido.", color=self.bot.cor)
-            msg = await message.channel.send(embed=embed)
-            await asyncio.sleep(10)
-            await msg.delete()
-          elif not message.author.id in aviso2:
-            aviso2.append(message.author.id)
-            await message.delete()
-            embed=discord.Embed(description=f" <:unlike:760197986592096256> **|** Olá {message.author.mention}, não é permitido **CONVITES** de outros servidores sem a permissão dos **ADMINISTRADORES** segundo as regras.\nTendo isso em mente irei avisa-lo esse é seu **2° Strike**.\nNo **3° Strike** você será banido.", color=self.bot.cor)
-            msg = await message.channel.send(embed=embed)
-            await asyncio.sleep(10)
-            await msg.delete()
-          else:
-            await message.delete()
-            aviso1.remove(message.author.id)     
-            aviso2.remove(message.author.id)       
-            print('ban')
-            #await message.author.send("pow pra que divulgar mano?\n\n~~não responda essa mensagem~~")
-            await message.author.ban(reason="Divulgando.")
+        if re.search(r'discord(?:app\\?[\s\S]com\\?\/invite|\\?[\s\S]gg|\\?[\s\S]me)\/', message.content) or re.search(r'invite\\?[\s\S]gg\\?\/[\s\S]', message.content) or "privatepage" in message.content.lower() or "naked" in message.content.lower():
+            if str("💼┃Parceiro") in [r.name for r in message.author.roles if r.name != "@everyone"] or str("772972507002568705") in [r.id for r in message.author.roles if r.name != "@everyone"]:
+                print("OK")
+                
+            else:
+                if not message.author.id in aviso1:
+                    aviso1.append(message.author.id)
+                    await message.delete()
+                    embed=discord.Embed(description=f" <:unlike:760197986592096256> **|** Olá {message.author.mention}, não é permitido **CONVITES** de outros servidores sem a permissão dos **ADMINISTRADORES** segundo as regras.\nTendo isso em mente irei avisa-lo esse é seu **1° Strike**.\nNo **3° Strike** você será banido.", color=self.bot.cor)
+                    msg = await message.channel.send(embed=embed)
+                    await asyncio.sleep(10)
+                    await msg.delete()
+                elif not message.author.id in aviso2:
+                    aviso2.append(message.author.id)
+                    await message.delete()
+                    embed=discord.Embed(description=f" <:unlike:760197986592096256> **|** Olá {message.author.mention}, não é permitido **CONVITES** de outros servidores sem a permissão dos **ADMINISTRADORES** segundo as regras.\nTendo isso em mente irei avisa-lo esse é seu **2° Strike**.\nNo **3° Strike** você será banido.", color=self.bot.cor)
+                    msg = await message.channel.send(embed=embed)
+                    await asyncio.sleep(10)
+                    await msg.delete()
+                else:
+                    await message.delete()
+                    aviso1.remove(message.author.id)     
+                    aviso2.remove(message.author.id)       
+                    print('ban')
+                    #await message.author.send("pow pra que divulgar mano?\n\n~~não responda essa mensagem~~")
+                    await message.author.ban(reason="Divulgando.")
 
     @commands.Cog.listener()
     async def on_message_delete(self,message):
@@ -245,7 +249,7 @@ class events(commands.Cog):
                 if canal is None:
                     return
                 await canal.send(embed=embed)
-
+    '''
     @commands.Cog.listener()
     async def on_bulk_message_delete(self, message_list):
         message_channel = message_list[0].channel
@@ -268,6 +272,7 @@ class events(commands.Cog):
         await channel.send(embed=embed, file=discord.File(filename))
         file.close()
         #os.remove(filename)
+        '''
 
     @commands.Cog.listener()
     async def on_member_update(self, before, after):
