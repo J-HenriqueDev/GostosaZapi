@@ -57,15 +57,7 @@ class main(discord.ext.commands.Bot):
                 except Exception as e:
                     print(f"FALHA AO CARREGAR  [{file}] MODULO ERROR [{e}]")
                     self.falhas += 1
-        print("( * ) | Tentando se conectar ao banco de dados...")
-        try:
-            mongo = MongoClient(self.database)
-        except Exception as e:
-            print(f"\n<---------------->\n( ! ) | Erro na tentativa de conexão com o banco de dados!\n<----------->\n{e}\n<---------------->\n")
-            exit()
-    
-        self.db = mongo['insiders']
-        print(f"( > ) | Conectado ao banco de dados!")
+        
     
 
 
