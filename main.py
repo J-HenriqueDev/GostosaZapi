@@ -105,7 +105,7 @@ class main(discord.ext.commands.Bot):
        
         
         
-
+bot = main()
 
 if __name__ == '__main__':
     try:
