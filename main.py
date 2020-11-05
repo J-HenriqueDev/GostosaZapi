@@ -79,6 +79,10 @@ class main(discord.ext.commands.Bot):
         except Exception as e:
             self.dispatch('command_error', ctx, e)
 
+        if message.channel.id == self.sugestao:
+            await message.add_reaction('<:like:760197986609004584>')
+            return await message.add_reaction('<:unlike:760197986592096256>')
+
 
     async def on_ready(self):
         print('---------- Bot Online -----------')

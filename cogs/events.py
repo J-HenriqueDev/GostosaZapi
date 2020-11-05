@@ -134,29 +134,7 @@ class events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.guild is None:
-          return 
-
-        if message.author.bot or not message.channel.permissions_for(message.guild.me).send_messages:
-          return
-       
-        ctx = await self.bot.get_context(message)
-       
-        if not ctx.valid:
-          return
-       
-        try:
-            await self.bot.invoke(ctx)
-        except Exception as e:
-            self.bot.dispatch('command_error', ctx, e)
-
-  ##########################################################################   
-      
-        if message.channel.id == self.bot.sugestao:
-            await message.add_reaction('<:like:760197986609004584>')
-            return await message.add_reaction('<:unlike:760197986592096256>')
-
-
+        
     ################################################################################
 
 
