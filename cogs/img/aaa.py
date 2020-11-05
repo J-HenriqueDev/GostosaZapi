@@ -16,7 +16,7 @@ class captchac(commands.Cog):
         canal = discord.utils.get(member.guild.channels, name='「🔺」captcha')
         canal_boasvindas = discord.utils.get(member.guild.channels, name='「🚪」bem-vindo')
         await member.add_roles(member.guild.get_role(772972516817895484))
-        await canal_boasvindas.send(f'{member.mention}, Seja bem vindo ao  nosso servidor, Leia as regras e seja feliz <3')
+        #await canal_boasvindas.send(f'{member.mention}, Seja bem vindo ao  nosso servidor, Leia as regras e seja feliz <3')
         try:
             numeros = randint(1000,10000)
             image = ImageCaptcha()
@@ -25,7 +25,7 @@ class captchac(commands.Cog):
             mention = await canal.send(member.mention)
             embed = discord.Embed(description="",color=0x7289da)
             embed.set_author(name="🔑| Captcha")
-            embed.add_field(name='Porfavor escreva os números a baixo (sem espaço) ',value= f"**--Tempo maximo de 5 minutos--**")
+            embed.add_field(name='Por favor escreva os números a baixo (sem espaço) ',value= f"**--Tempo maximo de 5 minutos--**")
             embed.set_image(url="attachment://out.png")
             embed_enviado = await canal.send(embed=embed, file=discord.File('out.png'))
 

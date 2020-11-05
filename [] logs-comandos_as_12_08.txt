@@ -1,6 +1,0 @@
-          
-  USUARIO         ID                  CONTEUDO                                                                                                           HORARIO                
-    
-  Insider's#5835  760196609161822219  <:discord:761259308859523112> <@478266814204477448> enviou o comando **`nuicea`** para verificação.                15:04:39 - 04/11/2020  
-  Insider's#5835  760196609161822219  <:discord:761259308859523112> O comando **`nuicea`** enviado por <@478266814204477448> foi aprovado por **Neo_**.  15:04:47 - 04/11/2020  
-  Neo_#0007       478266814204477448  c.clear 10                                                                                                         15:08:03 - 04/11/2020  
